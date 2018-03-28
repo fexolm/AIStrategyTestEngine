@@ -1,14 +1,18 @@
 #include <SDL2/SDL.h>
-
-int event_handler(void *userdata, SDL_Event *event);
-
+#include <stdbool.h>
+#include "StorkEngine.h"
+#include <time.h>
+#include <stdlib.h>
+#include "StorkEngine_def.h"
 int main() {
+  srand((unsigned int) time(NULL));
+
   if (SDL_Init(SDL_INIT_VIDEO)!=0) {
     printf("SDL_Init Error: %s\n", SDL_GetError());;
     return 1;
   }
 
-  SDL_Window *win = SDL_CreateWindow("AIStrategyTestEngine!", 100, 100, 800, 600, SDL_WINDOW_SHOWN);
+  SDL_Window *win = SDL_CreateWindow("StorkEngine", 100, 100, 800, 600, SDL_WINDOW_SHOWN);
   if (!win) {
     printf("SDL_CreateWindow Error: %s\n", SDL_GetError());
     return 1;
@@ -20,46 +24,40 @@ int main() {
     return 1;
   }
 
-  SDL_AddEventWatch(event_handler, NULL);
+  bool running = true;
 
-  SDL_SetRenderDrawColor(ren, 0, 0, 0, 0);
-  SDL_RenderClear(ren);
-  SDL_SetRenderDrawColor(ren, 255, 0, 0, 255);
-  for (int i = 0; i < 800; ++i)
-    SDL_RenderDrawPoint(ren, i, i*3/4);
+  Uint32 ticks = SDL_GetTicks();
 
-  SDL_Rect rect;
-  rect.x = 100;
-  rect.y = 100;
-  rect.h = 500;
-  rect.w = 500;
+  StorkEngine_GameData gameData = StorkEngine_CreateGameData();
 
-  SDL_RenderFillRect(ren, &rect);
+  size_t kek = gameData->map->height;
 
-  SDL_RenderPresent(ren);
+  while (running) {
+    SDL_Event event;
+    while (SDL_PollEvent(&event)
+        && event.type==SDL_KEYDOWN
+        && event.key.keysym.sym==SDLK_ESCAPE)
+      running = false;
 
-  SDL_Event event;
+    Uint32 now = SDL_GetTicks();
+    if (now - ticks < STORK_ENGINE_TICK_INTERVAL)
+      continue;
+    ticks = now;
 
-  while (1) {
-    if (SDL_PollEvent(&event) && event.type==SDL_QUIT)
-      break;
+    SDL_SetRenderDrawColor(ren, 0, 0, 0, 0);
+    SDL_RenderClear(ren);
+
+    StorkEngine_PerformGameTick(ren, gameData);
+
     SDL_RenderPresent(ren);
   }
+
+  StorkEngine_DestroyGameData(gameData);
 
   SDL_DestroyRenderer(ren);
   SDL_DestroyWindow(win);
   SDL_Quit();
+
   return 0;
 }
 
-int event_handler(void *userdata, SDL_Event *event) {
-  if (event->type==SDL_KEYDOWN) {
-    if (event->key.keysym.sym==SDLK_ESCAPE) {
-      SDL_Event exitEvent;
-      exitEvent.type = SDL_QUIT;
-      SDL_PushEvent(&exitEvent);
-      return 1;
-    }
-  }
-  return 0;
-}
