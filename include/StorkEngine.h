@@ -1,11 +1,8 @@
 #pragma once
 #include <SDL_render.h>
 #include "GameMap.h"
-struct __GameData {
-  StorkEngine_GameMap map;
-};
-
-typedef struct __GameData *StorkEngine_GameData;
+#include "StorkEngine_GL.h"
+#include "StorkEngine_Data.h"
 
 StorkEngine_GameData StorkEngine_CreateGameData();
 

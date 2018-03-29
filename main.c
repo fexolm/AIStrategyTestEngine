@@ -2,8 +2,6 @@
 #include <stdbool.h>
 #include "StorkEngine.h"
 #include <time.h>
-#include <stdlib.h>
-#include "StorkEngine_def.h"
 int main() {
   srand((unsigned int) time(NULL));
 
@@ -29,6 +27,8 @@ int main() {
   Uint32 ticks = SDL_GetTicks();
 
   StorkEngine_GameData gameData = StorkEngine_CreateGameData();
+
+  StorkEngine_GameInit(gameData);
 
   size_t kek = gameData->map->height;
 

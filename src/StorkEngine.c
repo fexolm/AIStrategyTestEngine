@@ -4,6 +4,8 @@
 void StorkEngine_PerformGameTick(SDL_Renderer *ren, StorkEngine_GameData data) {
   for (size_t y = 0; y < data->map->height; y++) {
     for (size_t x = 0; x < data->map->width; x++) {
+
+
       StorkEngine_DrawCell(ren, StorkEngine_GetMapCell(data->map, x, y), x, y);
     }
   }
@@ -12,10 +14,15 @@ void StorkEngine_PerformGameTick(SDL_Renderer *ren, StorkEngine_GameData data) {
 extern const size_t StorkEngine_MapSize;
 
 StorkEngine_GameData StorkEngine_CreateGameData() {
-  void *mem = malloc(sizeof(struct __GameData) + StorkEngine_MapSize);
+  void *mem = malloc(
+      sizeof(struct __GameData)
+          + StorkEngine_MapSize
+          + sizeof(StorkEngine_Player)*STORK_ENGINE_PLAYER_COUNT);
   StorkEngine_GameData data = mem;
   mem += sizeof(struct __GameData);
   data->map = StorkEngine_ConstructGameMap(mem);
+  mem += StorkEngine_MapSize;
+  data->players = mem;
   return data;
 }
 

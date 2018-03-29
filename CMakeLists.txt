@@ -11,4 +11,9 @@ file(GLOB SOURCES "src/*.c")
 file(GLOB HEADERS "include/*.h")
 
 add_executable(StorkEngine main.c ${SOURCES} ${HEADERS})
+
+add_executable(StorkEngine_test testmain.c ${SOURCES} ${HEADERS})
+
 target_link_libraries(StorkEngine ${SDL2_LIBRARIES})
+
+target_link_libraries(StorkEngine_test ${SDL2_LIBRARIES})
