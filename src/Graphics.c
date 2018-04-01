@@ -1,4 +1,5 @@
-#include "DrawUtils.h"
+#include "StorkEngine_Graphics.h"
+#include "StorkEngine_def.h"
 
 void StorkEngine_DrawCell(SDL_Renderer *ren, StorkEngine_CellType cellType, size_t x, size_t y) {
   switch (cellType) {
@@ -23,8 +24,8 @@ void StorkEngine_DrawCell(SDL_Renderer *ren, StorkEngine_CellType cellType, size
   }
 
   SDL_Rect rect;
-  rect.x = (int) (x* STORK_ENGINE_CELL_SIZE);
-  rect.y = (int) (y* STORK_ENGINE_CELL_SIZE);
+  rect.x = (int) (x*STORK_ENGINE_CELL_SIZE);
+  rect.y = (int) (y*STORK_ENGINE_CELL_SIZE);
   rect.h = 20;
   rect.w = 20;
 

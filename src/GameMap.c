@@ -1,5 +1,6 @@
 #include <stdlib.h>
-#include "GameMap.h"
+#include "StorkEngine.h"
+#include "StorkEngine_def.h"
 
 void __fill_map(StorkEngine_GameMap map);
 
