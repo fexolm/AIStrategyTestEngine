@@ -6,27 +6,22 @@
 int main() {
   srand((unsigned int) time(NULL));
 
-//  if (SDL_Init(SDL_INIT_VIDEO)!=0) {
-//    printf("SDL_Init Error: %s\n", SDL_GetError());;
-//    return 1;
-//  }
-//
-//  SDL_Window *win = SDL_CreateWindow("StorkEngine", 100, 100, 800, 600, SDL_WINDOW_SHOWN);
-//  if (!win) {
-//    printf("SDL_CreateWindow Error: %s\n", SDL_GetError());
-//    return 1;
-//  }
-//
-//  SDL_Renderer *ren = SDL_CreateRenderer(win, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
-//  if (!ren) {
-//    printf("SDL_CreateRenderer Error: %s", SDL_GetError());
-//    return 1;
-//  }
+  if (SDL_Init(SDL_INIT_VIDEO)!=0) {
+    printf("SDL_Init Error: %s\n", SDL_GetError());;
+    return 1;
+  }
 
+  SDL_Window *win = SDL_CreateWindow("StorkEngine", 100, 100, 800, 600, SDL_WINDOW_SHOWN);
+  if (!win) {
+    printf("SDL_CreateWindow Error: %s\n", SDL_GetError());
+    return 1;
+  }
 
-  SDL_Renderer *ren = NULL;
-  SDL_Window *win = NULL;
-
+  SDL_Renderer *ren = SDL_CreateRenderer(win, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+  if (!ren) {
+    printf("SDL_CreateRenderer Error: %s", SDL_GetError());
+    return 1;
+  }
 
   bool running = true;
 
@@ -50,12 +45,12 @@ int main() {
       continue;
     ticks = now;
 
-//    SDL_SetRenderDrawColor(ren, 0, 0, 0, 0);
-//    SDL_RenderClear(ren);
+    SDL_SetRenderDrawColor(ren, 0, 0, 0, 0);
+    SDL_RenderClear(ren);
 
     StorkEngine_PerformGameTick(ren, gameData);
 
-//    SDL_RenderPresent(ren);
+    SDL_RenderPresent(ren);
   }
 
   StorkEngine_DestroyGameData(gameData);

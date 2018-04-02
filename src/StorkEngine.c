@@ -5,10 +5,10 @@
 void StorkEngine_PerformGameTick(SDL_Renderer *ren, StorkEngine_GameData data) {
   for (size_t y = 0; y < data->map->height; y++) {
     for (size_t x = 0; x < data->map->width; x++) {
-//      StorkEngine_DrawCell(ren, StorkEngine_GetMapCell(data->map, x, y), x, y);
-      StorkEngine_ProcessUserInput(data);
+      StorkEngine_DrawCell(ren, StorkEngine_GetMapCell(data->map, x, y), x, y);
     }
   }
+  StorkEngine_ProcessUserInput(data);
 }
 
 StorkEngine_GameData StorkEngine_CreateGameData() {
