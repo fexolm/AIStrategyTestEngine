@@ -10,8 +10,10 @@ void StorkEngine_PerformGameTick(SDL_Renderer *ren, StorkEngine_GameData data) {
       StorkEngine_DrawCell(ren, StorkEngine_GetMapCell(data->map, x, y), x, y);
     }
   }
-  StorkEngine_ProcessUserInput(data);
-
+  if (!(data->tickIndex%5)) {
+    StorkEngine_ProcessUserInput(data);
+  }
+  data->tickIndex++;
 }
 
 StorkEngine_GameData StorkEngine_CreateGameData() {
@@ -27,8 +29,8 @@ StorkEngine_GameData StorkEngine_CreateGameData() {
   data->map = StorkEngine_ConstructGameMap(mem);
   mem += map_size;
   data->strategies = mem;
-
   data->projectiles.head = NULL;
+  data->tickIndex = 0;
   return data;
 }
 
@@ -43,9 +45,9 @@ void StorkEngine_GameInit(StorkEngine_GameData data) {
 
     data->strategies[i].object.point.x = (size_t) x;
     data->strategies[i].object.point.y = (size_t) y;
-    data->strategies[i].active = false;
     data->strategies[i].object.rotation = StorkEngineCMDR_Left;
     data->strategies[i].object.cellType = StorkEngineCT_Player1 << i;
+    data->strategies[i].dead = false;
 
     StorkEngine_SetMapCell(data->map, (size_t) x, (size_t) y, StorkEngineCT_Player1 << i);
   }
@@ -57,7 +59,7 @@ void StorkEngine_MoveObject(StorkEngine_GameMap map, StorkEngine_MapObject *obj,
   StorkEngine_SetMapCell(map, (size_t) obj->point.x, (size_t) obj->point.y, obj->cellType);
 }
 
-StorkEngine_Point StorkEngine_GetMovePoint(StorkEngine_MapObject *obj) {
+StorkEngine_Point StorkEngine_GetMovePoint(const StorkEngine_MapObject *obj) {
   StorkEngine_Point point = obj->point;
   switch (obj->rotation) {
   case StorkEngineCMDR_Right:point.x++;

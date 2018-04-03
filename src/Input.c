@@ -54,6 +54,8 @@ static void __ProcessUserInput(StorkEngine_Strategy *strategy, StorkEngine_GameD
 
 void StorkEngine_ProcessUserInput(StorkEngine_GameData data) {
   for (int i = 0; i < STORK_ENGINE_PLAYER_COUNT; i++) {
+    if (data->strategies[i].dead)
+      continue;
     __WriteGameState(&data->strategies[i], data);
     __ProcessUserInput(&data->strategies[i], data);
   }

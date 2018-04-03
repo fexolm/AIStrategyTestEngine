@@ -31,8 +31,6 @@ static void __connectStrategy(StorkEngine_GameData data, StorkEngine_Strategy *s
 
     strategy->pout = fd1[1]; // write desc
     strategy->pin = fd2[0]; // read desc
-    strategy->active = true;
-    strategy->pid = pid;
   }
 }
 

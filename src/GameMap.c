@@ -32,18 +32,18 @@ void __fill_map(StorkEngine_GameMap map) {
     }
   }
 
-  for (size_t i = 0; i < map->width; i++) {
-    StorkEngine_SetMapCell(map, i, 0, StorkEngineCT_Wall4HP);
-    StorkEngine_SetMapCell(map, i, map->width - 1, StorkEngineCT_Wall4HP);
-  }
-
-  for (size_t i = 0; i < map->height; i++) {
-    StorkEngine_SetMapCell(map, 0, i, StorkEngineCT_Wall4HP);
-    StorkEngine_SetMapCell(map, map->height - 1, i, StorkEngineCT_Wall4HP);
-  }
-
   for (int i = 0; i < 400; i++) {
     int x = rand()%STORK_ENGINE_MAP_WIDTH, y = rand()%STORK_ENGINE_MAP_HEIGHT;
     StorkEngine_SetMapCell(map, x, y, StorkEngineCT_Wall4HP);
+  }
+
+  for (size_t i = 0; i < map->width; i++) {
+    StorkEngine_SetMapCell(map, i, 0, StorkEngineCT_WallUndead);
+    StorkEngine_SetMapCell(map, i, map->width - 1, StorkEngineCT_WallUndead);
+  }
+
+  for (size_t i = 0; i < map->height; i++) {
+    StorkEngine_SetMapCell(map, 0, i, StorkEngineCT_WallUndead);
+    StorkEngine_SetMapCell(map, map->height - 1, i, StorkEngineCT_WallUndead);
   }
 }

@@ -21,6 +21,10 @@ void StorkEngine_DrawCell(SDL_Renderer *ren, StorkEngine_CellType cellType, size
     break;
   case StorkEngineCT_Player4:SDL_SetRenderDrawColor(ren, 225, 0, 255, 255);
     break;
+  case StorkEngineCT_Projectile:SDL_SetRenderDrawColor(ren, 100, 100, 100, 255);
+    break;
+  case StorkEngineCT_WallUndead:SDL_SetRenderDrawColor(ren, 30, 30, 30, 255);
+    break;
   }
 
   SDL_Rect rect;
