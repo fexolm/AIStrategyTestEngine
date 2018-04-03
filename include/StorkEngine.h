@@ -12,6 +12,7 @@ typedef enum __CellType {
   StorkEngineCT_Player2 = 1 << 6,
   StorkEngineCT_Player3 = 1 << 7,
   StorkEngineCT_Player4 = 1 << 8,
+  StorkEngineCT_Projectile = 1 << 9
 } StorkEngine_CellType;
 
 typedef enum __RotateDirecton {
@@ -41,23 +42,37 @@ typedef struct __Point {
   size_t y;
 } StorkEngine_Point;
 
-typedef struct __Strategy {
+typedef struct __MapObject {
   StorkEngine_CellType cellType;
+  StorkEngine_CmdRotateType rotation;
   StorkEngine_Point point;
+} StorkEngine_MapObject;
+
+typedef struct __Strategy {
+  StorkEngine_MapObject object;
   bool active;
   int pin;
   int pout;
   pid_t pid;
-  StorkEngine_CmdRotateType rotation;
 } StorkEngine_Strategy;
 
 typedef struct __Projectile {
-  StorkEngine_Point point;
+  StorkEngine_MapObject object;
 } StorkEngine_Projectile;
+
+typedef struct __ProjectileNode {
+  StorkEngine_Projectile projectile;
+  struct __ProjectileNode *next;
+} StorkEngine_ProjectileNode;
+
+typedef struct __ProjectileList {
+  StorkEngine_ProjectileNode *head;
+} StorkEngine_ProjectileList;
 
 struct __GameData {
   StorkEngine_GameMap map;
   StorkEngine_Strategy *strategies;
+  StorkEngine_ProjectileList projectiles;
 };
 
 struct __Command {
@@ -90,3 +105,15 @@ void StorkEngine_ProcessUserInput(StorkEngine_GameData data);
 StorkEngine_Command StorkEngine_BuildCommand(const char *const str);
 
 void StorkEngine_DestroyCommand(StorkEngine_Command cmd);
+
+void StorkEngine_MoveObject(StorkEngine_GameMap map, StorkEngine_MapObject *obj, StorkEngine_Point point);
+
+StorkEngine_Point StorkEngine_GetMovePoint(StorkEngine_MapObject *obj);
+
+void StorkEngine_SpawnProjectile(const StorkEngine_Strategy *const p, StorkEngine_GameData data);
+
+void StorkEngine_SpawnProjectile(const StorkEngine_Strategy *const p, StorkEngine_GameData data);
+
+void StorkEngine_RemoveProjectile(StorkEngine_GameData data, StorkEngine_ProjectileNode *node);
+
+void StorkEngine_UpdateProjectiles(StorkEngine_GameData data);

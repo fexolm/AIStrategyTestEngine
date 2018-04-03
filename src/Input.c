@@ -3,31 +3,19 @@
 #include "StorkEngine_def.h"
 
 static void __Move(StorkEngine_Strategy *strategy, StorkEngine_GameData data, StorkEngine_Command cmd) {
-  StorkEngine_Point point = strategy->point;
-  switch (strategy->rotation) {
-  case StorkEngineCMDR_Right:point.x++;
-    break;
-  case StorkEngineCMDR_Left:point.x--;
-    break;
-  case StorkEngineCMDR_Up:point.y--;
-    break;
-  case StorkEngineCMDR_Down:point.y++;
-    break;
-  }
+  StorkEngine_Point point = StorkEngine_GetMovePoint(&strategy->object);
 
   if (StorkEngine_GetMapCell(data->map, point.x, point.y)==StorkEngineCT_Empty) {
-    StorkEngine_SetMapCell(data->map, (size_t) strategy->point.x, (size_t) strategy->point.y, StorkEngineCT_Empty);
-    strategy->point = point;
-    StorkEngine_SetMapCell(data->map, (size_t) strategy->point.x, (size_t) strategy->point.y, strategy->cellType);
+    StorkEngine_MoveObject(data->map, &strategy->object, point);
   }
 }
 
 static void __Shoot(StorkEngine_Strategy *strategy, StorkEngine_GameData data, StorkEngine_Command cmd) {
-
+  StorkEngine_SpawnProjectile(strategy, data);
 }
 
 static void __Rotate(StorkEngine_Strategy *strategy, StorkEngine_GameData data, StorkEngine_Command cmd) {
-  strategy->rotation = *((StorkEngine_CmdRotateType *) cmd->commandPrivate);
+  strategy->object.rotation = *((StorkEngine_CmdRotateType *) cmd->commandPrivate);
 }
 
 static void __ProcessCommand(StorkEngine_Strategy *strategy, StorkEngine_GameData data, StorkEngine_Command cmd) {
@@ -61,6 +49,7 @@ static void __ProcessUserInput(StorkEngine_Strategy *strategy, StorkEngine_GameD
   read(strategy->pin, buf, 128);
   StorkEngine_Command cmd = StorkEngine_BuildCommand(buf);
   __ProcessCommand(strategy, data, cmd);
+  StorkEngine_DestroyCommand(cmd);
 }
 
 void StorkEngine_ProcessUserInput(StorkEngine_GameData data) {
