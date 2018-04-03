@@ -25,7 +25,7 @@ int main() {
 
   bool running = true;
 
-  Uint32 ticks = SDL_GetTicks();
+  Uint32 ticks = SDL_GetTicks() + STORK_ENGINE_TICK_INTERVAL;
 
   StorkEngine_GameData gameData = StorkEngine_CreateGameData();
 

@@ -14,6 +14,20 @@ typedef enum __CellType {
   StorkEngineCT_Player4 = 1 << 8,
 } StorkEngine_CellType;
 
+typedef enum __RotateDirecton {
+  StorkEngineCMDR_Right = 0,
+  StorkEngineCMDR_Left = 1,
+  StorkEngineCMDR_Up = 2,
+  StorkEngineCMDR_Down = 3
+} StorkEngine_CmdRotateType;
+
+typedef enum __CommandType {
+  StorkEngineCMD_Nope = 0,
+  StorkEngineCMD_Move = 1,
+  StorkEngineCMD_Shoot = 2,
+  StorkEngineCMD_Rotate = 3
+} StorkEngine_CommandType;
+
 struct __GameMap {
   size_t width;
   size_t height;
@@ -28,11 +42,13 @@ typedef struct __Point {
 } StorkEngine_Point;
 
 typedef struct __Strategy {
+  StorkEngine_CellType cellType;
   StorkEngine_Point point;
   bool active;
   int pin;
   int pout;
   pid_t pid;
+  StorkEngine_CmdRotateType rotation;
 } StorkEngine_Strategy;
 
 typedef struct __Projectile {
@@ -43,6 +59,13 @@ struct __GameData {
   StorkEngine_GameMap map;
   StorkEngine_Strategy *strategies;
 };
+
+struct __Command {
+  StorkEngine_CommandType type;
+  void *commandPrivate;
+};
+
+typedef struct __Command *StorkEngine_Command;
 
 typedef struct __GameData *StorkEngine_GameData;
 
@@ -63,3 +86,7 @@ void StorkEngine_SetMapCell(StorkEngine_GameMap map, size_t x, size_t y, StorkEn
 void StorkEngine_ConnectStrategies(StorkEngine_GameData data);
 
 void StorkEngine_ProcessUserInput(StorkEngine_GameData data);
+
+StorkEngine_Command StorkEngine_BuildCommand(const char *const str);
+
+void StorkEngine_DestroyCommand(StorkEngine_Command cmd);

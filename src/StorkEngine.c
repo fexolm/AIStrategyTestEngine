@@ -9,6 +9,7 @@ void StorkEngine_PerformGameTick(SDL_Renderer *ren, StorkEngine_GameData data) {
     }
   }
   StorkEngine_ProcessUserInput(data);
+
 }
 
 StorkEngine_GameData StorkEngine_CreateGameData() {
@@ -36,10 +37,11 @@ void StorkEngine_GameInit(StorkEngine_GameData data) {
     int x = rand()%STORK_ENGINE_MAP_WIDTH,
         y = rand()%STORK_ENGINE_MAP_HEIGHT;
 
-    data->strategies[i].point.x;
-    data->strategies[i].point.y;
+    data->strategies[i].point.x = (size_t) x;
+    data->strategies[i].point.y = (size_t) y;
     data->strategies[i].active = false;
-
+    data->strategies[i].rotation = StorkEngineCMDR_Left;
+    data->strategies[i].cellType = StorkEngineCT_Player1 << i;
     StorkEngine_SetMapCell(data->map, (size_t) x, (size_t) y, StorkEngineCT_Player1 << i);
   }
 }

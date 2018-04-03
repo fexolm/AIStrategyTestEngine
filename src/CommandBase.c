@@ -1,7 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
-#include "StorkEngine_Commands.h"
-
+#include <StorkEngine.h>
 StorkEngine_Command StorkEngine_BuildCommand(const char *const str) {
   StorkEngine_Command cmd = malloc(sizeof(StorkEngine_Command));
   sscanf(str, "%d", &cmd->type);

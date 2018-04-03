@@ -1,10 +1,46 @@
 #include <unistd.h>
 #include "StorkEngine.h"
 #include "StorkEngine_def.h"
-#include "StorkEngine_Commands.h"
 
-static void __ProcessCommand(StorkEngine_GameData data, StorkEngine_Command cmd) {
+static void __Move(StorkEngine_Strategy *strategy, StorkEngine_GameData data, StorkEngine_Command cmd) {
+  StorkEngine_Point point = strategy->point;
+  switch (strategy->rotation) {
+  case StorkEngineCMDR_Right:point.x++;
+    break;
+  case StorkEngineCMDR_Left:point.x--;
+    break;
+  case StorkEngineCMDR_Up:point.y--;
+    break;
+  case StorkEngineCMDR_Down:point.y++;
+    break;
+  }
 
+  if (StorkEngine_GetMapCell(data->map, point.x, point.y)==StorkEngineCT_Empty) {
+    StorkEngine_SetMapCell(data->map, (size_t) strategy->point.x, (size_t) strategy->point.y, StorkEngineCT_Empty);
+    strategy->point = point;
+    StorkEngine_SetMapCell(data->map, (size_t) strategy->point.x, (size_t) strategy->point.y, strategy->cellType);
+  }
+}
+
+static void __Shoot(StorkEngine_Strategy *strategy, StorkEngine_GameData data, StorkEngine_Command cmd) {
+
+}
+
+static void __Rotate(StorkEngine_Strategy *strategy, StorkEngine_GameData data, StorkEngine_Command cmd) {
+  strategy->rotation = *((StorkEngine_CmdRotateType *) cmd->commandPrivate);
+}
+
+static void __ProcessCommand(StorkEngine_Strategy *strategy, StorkEngine_GameData data, StorkEngine_Command cmd) {
+  switch (cmd->type) {
+
+  case StorkEngineCMD_Nope:break;
+  case StorkEngineCMD_Move:__Move(strategy, data, cmd);
+    break;
+  case StorkEngineCMD_Shoot:__Shoot(strategy, data, cmd);
+    break;
+  case StorkEngineCMD_Rotate:__Rotate(strategy, data, cmd);
+    break;
+  }
 }
 
 static void __WriteGameState(StorkEngine_Strategy *strategy, StorkEngine_GameData data) {
@@ -24,7 +60,7 @@ static void __ProcessUserInput(StorkEngine_Strategy *strategy, StorkEngine_GameD
   char buf[128];
   read(strategy->pin, buf, 128);
   StorkEngine_Command cmd = StorkEngine_BuildCommand(buf);
-  __ProcessCommand(data, cmd);
+  __ProcessCommand(strategy, data, cmd);
 }
 
 void StorkEngine_ProcessUserInput(StorkEngine_GameData data) {
