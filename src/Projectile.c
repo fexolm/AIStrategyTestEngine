@@ -16,7 +16,7 @@ static void __ProcessCollide(StorkEngine_GameData data, StorkEngine_Point point)
     }
   }
 
-  if (type & (StorkEngineCT_Wall1HP | StorkEngineCT_Wall2HP | StorkEngineCT_Wall3HP | StorkEn]gineCT_Wall4HP)) {
+  if (type & (StorkEngineCT_Wall1HP | StorkEngineCT_Wall2HP | StorkEngineCT_Wall3HP | StorkEngineCT_Wall4HP)) {
     StorkEngine_SetMapCell(data->map, point.x, point.y, type >> 1);
   }
 }
